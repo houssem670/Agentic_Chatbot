@@ -22,11 +22,11 @@ from langgraph.types import interrupt, Command
 
 load_dotenv()
 
-llm1 = ChatGoogleGenerativeAI(
+llm = ChatGoogleGenerativeAI(
     model="gemini-3.5-flash",
     temperature=0.7
 )
-llm = ChatGroq(
+llm1 = ChatGroq(
     model="openai/gpt-oss-20b",
     temperature=0.7
 )
