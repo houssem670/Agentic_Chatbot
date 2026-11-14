@@ -21,7 +21,7 @@ permissions:
 # Non-secret Azure settings: change them here if you want other names.
 env:
   AZURE_RESOURCE_GROUP: rg-agentic
-  AZURE_LOCATION: westeurope
+  AZURE_LOCATION: francecentral
   CONTAINER_APP_ENV: env-agentic
   CONTAINER_APP_NAME: stapp
 
