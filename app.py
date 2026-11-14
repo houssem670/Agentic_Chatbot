@@ -27,11 +27,6 @@ from ui_theme import (
     hitl_card_html
 )
 
-
-# ============================================================
-# 1. CONFIGURATION
-# ============================================================
-
 st.set_page_config(
     page_title="Agentic AI Assistant",
     page_icon="🤖",
@@ -44,11 +39,6 @@ st.caption(
 )
 
 DATABASE_PATH = "chatbot.db"
-
-
-# ============================================================
-# 2. SQLITE - CONVERSATION TITLES
-# ============================================================
 
 def get_db_connection():
     return sqlite3.connect(
@@ -137,11 +127,6 @@ def create_conversation_title(thread_id, user_message):
 
 init_title_database()
 
-
-# ============================================================
-# 3. THREAD MANAGEMENT
-# ============================================================
-
 def generate_thread_id():
     return str(uuid.uuid4())
 
@@ -184,11 +169,6 @@ def get_thread_config(thread_id):
         ],
         "run_name": "agentic_chatbot_execution"
     }
-
-
-# ============================================================
-# 4. MESSAGE UTILITIES
-# ============================================================
 
 def extract_text(content):
 
@@ -258,11 +238,6 @@ def load_conversation(thread_id):
             })
 
     return history
-
-
-# ============================================================
-# 5. HUMAN-IN-THE-LOOP
-# ============================================================
 
 def get_pending_interrupt(thread_id):
 
@@ -341,11 +316,6 @@ def sync_pending_interrupt(thread_id):
 
             st.session_state["pending_hitl"] = None
 
-
-# ============================================================
-# 6. STREAMING UTILITIES
-# ============================================================
-
 def stream_graph_response(
     input_data,
     config,
@@ -387,11 +357,6 @@ def stream_graph_response(
 
             if text:
                 yield text
-
-
-# ============================================================
-# 7. RESUME HITL EXECUTION
-# ============================================================
 
 def resume_hitl_execution(decision):
 
@@ -457,8 +422,6 @@ def resume_hitl_execution(decision):
                     expanded=False
                 )
 
-        # Refresh the complete history from LangGraph.
-        # This avoids storing duplicate streamed messages.
         if thread_id == st.session_state["thread_id"]:
 
             st.session_state["message_history"] = (
@@ -472,11 +435,6 @@ def resume_hitl_execution(decision):
         st.error(
             f"Could not resume the workflow: {error}"
         )
-
-
-# ============================================================
-# 8. INITIALIZE SESSION STATE
-# ============================================================
 
 if "message_history" not in st.session_state:
     st.session_state["message_history"] = []
@@ -498,11 +456,6 @@ add_thread(
 sync_pending_interrupt(
     st.session_state["thread_id"]
 )
-
-
-# ============================================================
-# 9. SIDEBAR - CONVERSATION HISTORY
-# ============================================================
 
 apply_theme(st.session_state["thread_id"])
 
@@ -526,7 +479,7 @@ for thread_id in st.session_state["chat_threads"]:
 
     if thread_id == st.session_state["thread_id"]:
 
-        button_label = f"📌 {title}"
+        button_label = f" {title}"
 
     else:
 
@@ -553,11 +506,6 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
-
-# ============================================================
-# 10. MAIN CHAT INTERFACE
-# ============================================================
-
 current_thread_id = st.session_state["thread_id"]
 
 current_title = get_conversation_title(
@@ -582,11 +530,6 @@ for message in st.session_state["message_history"]:
         st.markdown(
             message["content"]
         )
-
-
-# ============================================================
-# 11. HITL APPROVAL INTERFACE
-# ============================================================
 
 pending_hitl = st.session_state.get(
     "pending_hitl"
@@ -627,11 +570,6 @@ if current_thread_has_pending_hitl:
         ):
 
             resume_hitl_execution("no")
-
-
-# ============================================================
-# 12. PDF UPLOAD AND CHAT INPUT
-# ============================================================
 
 submission = st.chat_input(
     "Ask me anything...",
@@ -696,11 +634,6 @@ if submission:
 
                 os.remove(temporary_file_path)
 
-
-# ============================================================
-# 13. RUN AGENTIC CHATBOT
-# ============================================================
-
 if user_input:
 
     current_thread_id = st.session_state["thread_id"]
@@ -710,8 +643,7 @@ if user_input:
         current_thread_id,
         user_input
     )
-
-    # Display the user message.
+    
     st.session_state["message_history"].append({
         "role": "user",
         "content": user_input
@@ -745,7 +677,6 @@ if user_input:
                 )
             )
 
-            # Check for an unresolved LangGraph interrupt.
             pending_interrupt = get_pending_interrupt(
                 current_thread_id
             )
@@ -771,12 +702,10 @@ if user_input:
                     expanded=False
                 )
 
-        # Reload history from the authoritative LangGraph state.
         st.session_state["message_history"] = (
             load_conversation(current_thread_id)
         )
 
-        # The approval prompt is displayed separately by the HITL UI.
         st.rerun()
 
     except Exception as error:
