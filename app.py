@@ -20,20 +20,27 @@ from langchain_core.messages import (
 
 from langgraph.types import Command
 
+from ui_theme import (
+    apply_theme,
+    sidebar_status_html,
+    welcome_panel_html,
+    hitl_card_html
+)
+
 
 # ============================================================
 # 1. CONFIGURATION
 # ============================================================
 
 st.set_page_config(
-    page_title="Agentic AI Chatbot",
+    page_title="Agentic AI Assistant",
     page_icon="🤖",
     layout="wide"
 )
 
-st.title("🤖 Agentic AI Chatbot")
+st.title("🤖 Agentic AI Assistant")
 st.caption(
-    "Powered by LangGraph, LLMs, RAG and Human-in-the-Loop"
+    "Agentic workflows · Document retrieval · Human approval"
 )
 
 DATABASE_PATH = "chatbot.db"
@@ -372,7 +379,7 @@ def stream_graph_response(
                     state="running"
                 )
 
-        elif message_type == "ai":
+        elif message_type in ("ai", "AIMessageChunk"):
 
             text = extract_text(
                 message_chunk.content
@@ -497,6 +504,8 @@ sync_pending_interrupt(
 # 9. SIDEBAR - CONVERSATION HISTORY
 # ============================================================
 
+apply_theme(st.session_state["thread_id"])
+
 st.sidebar.title("💬 My Conversations")
 
 if st.sidebar.button(
@@ -539,6 +548,11 @@ for thread_id in st.session_state["chat_threads"]:
 
         st.rerun()
 
+st.sidebar.markdown(
+    sidebar_status_html("Gemini 3.5 Flash · GPT-OSS 20B", "Ready"),
+    unsafe_allow_html=True
+)
+
 
 # ============================================================
 # 10. MAIN CHAT INTERFACE
@@ -550,12 +564,20 @@ current_title = get_conversation_title(
     current_thread_id
 )
 
-st.subheader(current_title)
+if st.session_state["message_history"]:
+    st.subheader(current_title)
+else:
+    st.markdown(
+        welcome_panel_html(),
+        unsafe_allow_html=True
+    )
 
 
 for message in st.session_state["message_history"]:
 
-    with st.chat_message(message["role"]):
+    avatar = "👤" if message["role"] == "user" else "🤖"
+
+    with st.chat_message(message["role"], avatar=avatar):
 
         st.markdown(
             message["content"]
@@ -578,9 +600,9 @@ current_thread_has_pending_hitl = (
 
 if current_thread_has_pending_hitl:
 
-    st.warning(
-        "🧑 Human approval required\n\n"
-        f"{pending_hitl['prompt']}"
+    st.markdown(
+        hitl_card_html(pending_hitl["prompt"]),
+        unsafe_allow_html=True
     )
 
     approve_column, reject_column = st.columns(2)
@@ -695,7 +717,7 @@ if user_input:
         "content": user_input
     })
 
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar="👤"):
         st.markdown(user_input)
 
     config = get_thread_config(
@@ -704,7 +726,7 @@ if user_input:
 
     try:
 
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", avatar="🤖"):
 
             status_box = st.status(
                 "🤖 Agent is processing your request...",
