@@ -15,9 +15,6 @@
   <img src="https://img.shields.io/badge/Render-Deployed-46E3B7?logo=render&logoColor=black" alt="Render" />
 </p>
 
----
-
-## 📌 Overview
 
 ---
 
