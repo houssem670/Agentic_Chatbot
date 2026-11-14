@@ -11,6 +11,8 @@
   <img src="https://img.shields.io/badge/Streamlit-Frontend-red?logo=streamlit" alt="Streamlit" />
   <img src="https://img.shields.io/badge/Docker-Containerized-blue?logo=docker" alt="Docker" />
   <img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-black?logo=githubactions" alt="GitHub Actions" />
+  <img src="https://img.shields.io/badge/Microsoft%20Azure-Deployed-0078D4?logo=microsoftazure&logoColor=white" alt="Microsoft Azure" />
+  <img src="https://img.shields.io/badge/Render-Deployed-46E3B7?logo=render&logoColor=black" alt="Render" />
 </p>
 
 ---
