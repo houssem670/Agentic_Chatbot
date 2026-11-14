@@ -1,31 +1,14 @@
-# Secrets
 .env
 .env.*
-
-# Environnements virtuels
 .venv
 venv/
 env/
-ENV/
-env.bak/
-venv.bak/
-
-# Git et CI
-.git
-.github
-.gitignore
-
-# Python
 __pycache__/
 *.pyc
-
-# Données locales (recréées au démarrage)
 *.db
 *.db-*
 faiss_db/
 faiss_index/
-
-# Divers
 .vscode/
 backup/
 *.md
