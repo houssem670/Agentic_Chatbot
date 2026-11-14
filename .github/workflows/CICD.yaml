@@ -6,19 +6,13 @@ on:
       - main
     paths-ignore:
       - "README.md"
-
-  # Allows you to run the workflow manually
   workflow_dispatch:
-
-# Prevent two deployments from running at the same time
 concurrency:
   group: agentic-chatbot-production
   cancel-in-progress: true
 
 permissions:
   contents: read
-
-# Non-secret Azure settings: change them here if you want other names.
 env:
   AZURE_RESOURCE_GROUP: rg-agentic
   AZURE_LOCATION: francecentral
@@ -26,9 +20,6 @@ env:
   CONTAINER_APP_NAME: stapp
 
 jobs:
-  # ============================================================
-  # 1. CONTINUOUS INTEGRATION
-  # ============================================================
   integration:
     name: Continuous Integration
     runs-on: ubuntu-latest
@@ -44,11 +35,7 @@ jobs:
       - name: Run unit tests
         run: |
           echo "Running unit tests"
-
-
-  # ============================================================
-  # 2. BUILD AND PUSH IMAGE TO DOCKER HUB
-  # ============================================================
+          
   push_to_registry:
     name: Build and Push Docker Image
     needs: integration
@@ -96,16 +83,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-
-  # ============================================================
-  # 3. DEPLOY TO AZURE CONTAINER APPS
-  # ============================================================
   continuous_deployment:
     name: Deploy to Azure Container Apps
     needs: push_to_registry
     runs-on: ubuntu-latest
 
-    # id-token is required for passwordless login to Azure (OIDC)
     permissions:
       id-token: write
       contents: read
