@@ -1,0 +1,9 @@
+.env
+*.db
+*.db-*
+__pycache__/
+.venv/
+venv/
+*.pyc
+faiss_db/
+faiss_index/
