@@ -1,17 +1,21 @@
 # 🤖 Agentic AI Chatbot
 
-\<p align="center">
-&#x20; \<strong>An intelligent AI assistant powered by LangGraph, LangChain, RAG and Human-in-the-Loop workflows.\</strong>
-\</p>
+<p align="center">
+  <strong>An intelligent AI assistant powered by LangGraph, LangChain, RAG and Human-in-the-Loop workflows.</strong>
+</p>
 
-\<p align="center">
-&#x20; \<img src="[https://img.shields.io/badge/Python-3.12-blue?logo=python](https://img.shields.io/badge/Python-3.12-blue?logo=python)" />
-&#x20; \<img src="[https://img.shields.io/badge/LangGraph-Agentic%20AI-green](https://img.shields.io/badge/LangGraph-Agentic%20AI-green)" />
-&#x20; \<img src="[https://img.shields.io/badge/LangChain-LLM-orange](https://img.shields.io/badge/LangChain-LLM-orange)" />
-&#x20; \<img src="[https://img.shields.io/badge/Streamlit-Frontend-red?logo=streamlit](https://img.shields.io/badge/Streamlit-Frontend-red?logo=streamlit)" />
-&#x20; \<img src="[https://img.shields.io/badge/Docker-Containerized-blue?logo=docker](https://img.shields.io/badge/Docker-Containerized-blue?logo=docker)" />
-&#x20; \<img src="[https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-black?logo=githubactions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-black?logo=githubactions)" />
-\</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.12-blue?logo=python" alt="Python" />
+  <img src="https://img.shields.io/badge/LangGraph-Agentic%20AI-green" alt="LangGraph" />
+  <img src="https://img.shields.io/badge/LangChain-LLM-orange" alt="LangChain" />
+  <img src="https://img.shields.io/badge/Streamlit-Frontend-red?logo=streamlit" alt="Streamlit" />
+  <img src="https://img.shields.io/badge/Docker-Containerized-blue?logo=docker" alt="Docker" />
+  <img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-black?logo=githubactions" alt="GitHub Actions" />
+</p>
+
+---
+
+## 📌 Overview
 
 ---
 
