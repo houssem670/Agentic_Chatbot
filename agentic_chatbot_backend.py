@@ -19,13 +19,9 @@ from langchain_community.vectorstores import FAISS
 import os 
 from typing import Any
 from langgraph.types import interrupt, Command
-# interrupt : permet de mettre le workflow en pause et de demander une décision humaine.
-# Command : permet de reprendre l'exécution du workflow en transmettant la décision humaine avec Command(resume=...)
 
 load_dotenv()
 
-
-# LLM 
 llm1 = ChatGoogleGenerativeAI(
     model="gemini-3.5-flash",
     temperature=0.7
@@ -35,8 +31,6 @@ llm = ChatGroq(
     temperature=0.7
 )
 
-
-# Embeddings model
 embeddings = GoogleGenerativeAIEmbeddings(model="gemini-embedding-001")
 
 
@@ -86,10 +80,6 @@ def get_retriever():
     return retriever
 
 
-
-
-# rag tool
-
 @tool
 def rag_tool(query: str) -> str:
     """
@@ -124,9 +114,6 @@ def rag_tool(query: str) -> str:
 
 
 
-
-
-# Tools
 
 tavily_client = TavilySearch(
     max_results=5,
@@ -197,7 +184,6 @@ def purchase_stock(symbol: str, quantity: int) -> dict:
     Before confirming the purchase, this tool will interrupt
     and wait for a human decision ("yes" / anything else).
     """
-    # This pauses the graph and returns control to the caller
     decision = interrupt(f"Approve buying {quantity} shares of {symbol}? (yes/no)")
 
     if isinstance(decision, str) and decision.lower() == "yes":
@@ -241,7 +227,6 @@ def get_current_weather(location: str) -> str:
         )
 
     try:
-        # Step 1: Convert the location name into latitude and longitude
         geocoding_url = "https://api.openweathermap.org/geo/1.0/direct"
 
         geocoding_params = {
@@ -267,8 +252,6 @@ def get_current_weather(location: str) -> str:
         resolved_name = locations[0].get("name", location)
         country = locations[0].get("country", "")
         state = locations[0].get("state", "")
-
-        # Step 2: Get current weather using latitude and longitude
         weather_url = "https://api.openweathermap.org/data/2.5/weather"
 
         weather_params = {
@@ -340,24 +323,13 @@ def get_current_weather(location: str) -> str:
         return f"Unexpected weather API response: {error}"
     
 
-
-# Make tool list
 tools = [search_tool,calculator, get_stock_price,get_current_weather, rag_tool, purchase_stock]
-
-# Make the LLM tool-aware
 llm_with_tools = llm.bind_tools(tools)
 
-
-
-
-# State
 class ChatState(TypedDict):
 
     messages: Annotated[list[BaseMessage], add_messages]
 
-
-
-# Nodes 1
 def chat_node(state: ChatState):
     """LLM node that can answer directly or call an appropriate tool."""
 
@@ -393,36 +365,21 @@ def chat_node(state: ChatState):
     return {"messages": [response]}
 
 
-
-
-# Nodes 2 - tool node
 tool_node = ToolNode(tools)
 
-
-
-# Checkpointer
 conn = sqlite3.connect(database="chatbot.db", check_same_thread=False)
 checkpoint = SqliteSaver(conn)
 
-
-
-# graph
 graph = StateGraph(ChatState)
-
-# add nodes
 graph.add_node('chat_node', chat_node)
 graph.add_node('tools', tool_node)
 
-#add edges
 graph.add_edge(START, 'chat_node')
 graph.add_conditional_edges("chat_node",tools_condition)
 graph.add_edge('tools', 'chat_node')
 
 chatbot = graph.compile(checkpointer=checkpoint)
 
-
-
-# Helper functions for Streamlit frontend
 def get_all_threads():
     all_threads = set()
     for ckpt in checkpoint.list(None):
