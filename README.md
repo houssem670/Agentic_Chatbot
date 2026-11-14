@@ -355,19 +355,6 @@ The main application capabilities have been manually tested.
 
 ---
 
-## 🚀 Future Improvements
-
-- Advanced multi-agent collaboration.
-- Authentication and user management.
-- Improved multi-document RAG management.
-- Conversation summarization and context optimization.
-- Automated security scanning with Trivy.
-- Dependency vulnerability scanning.
-- Application monitoring and observability.
-- Expanded automated testing.
-
----
-
 ## 🎯 Skills Demonstrated
 
 - Agentic AI Application Development
